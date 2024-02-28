@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./programs/anchor-launchpad/Cargo.toml",
+        "./programs/anchor-launchpad/Cargo.toml"
+    ]
+}
