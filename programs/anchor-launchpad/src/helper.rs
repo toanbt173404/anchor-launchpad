@@ -20,7 +20,6 @@ pub fn send_lamports<'a>(from: AccountInfo<'a>, to: AccountInfo<'a>, amount: u64
     ).map_err(|err| err.into())
 }
 
-
 pub fn check_during_sale_conditions(launchpad_account: &Account<LaunchpadAccount>) -> Result<()> {
     require!(launchpad_account.is_sale_active == 0, ErrorCode::SaleIsActive);
     require!(

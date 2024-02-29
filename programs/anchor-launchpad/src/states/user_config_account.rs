@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+pub const USER_HISTORY_REF_SIZE_USIZE: usize = 50;
 
 #[account]
 pub struct UserConfigAccount {
@@ -9,7 +10,12 @@ pub struct UserConfigAccount {
   pub ref_pubkey: Pubkey,
   pub claimed : bool,
   pub claimed_commission: bool,
-  pub history_ref:u64,
+  pub history_ref: Vec<HistoryRef>,
+}
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct HistoryRef {
+  pub amount: u64,
+  pub token_ref: Pubkey
 }
 
 impl Space for UserConfigAccount {
@@ -19,5 +25,5 @@ impl Space for UserConfigAccount {
         + 8 * 3 // balances, commission, history_ref (u64 each)
         + 32 // ref_pubkey (Pubkey)
         + 1 * 2 // claimed, claimed_commission (bool each)
-        + 8; // Additional padding if necessary or for future fields
+        + (32 + 8) * USER_HISTORY_REF_SIZE_USIZE;
 }

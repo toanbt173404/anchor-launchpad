@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use crate::{states::LaunchpadAccount, ConfigAccount};
+use crate::ConfigAccount;
 
 #[derive(Accounts)]
 pub struct ChangeCreateFee<'info> {

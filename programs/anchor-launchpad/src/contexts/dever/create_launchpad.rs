@@ -77,6 +77,7 @@ impl<'info> CreatLaunchpad<'info> {
             launchpad_params_step_1: params1,
             launchpad_params_step_2: params2,
             launchpad_params_step_3: params3,
+            commission_data: Default::default(),
         });
 
         self.mint_config_account.set_inner(MintConfigAccount {

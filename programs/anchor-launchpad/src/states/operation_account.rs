@@ -2,7 +2,6 @@ use anchor_lang::prelude:: *;
 
 pub const LIST_UER_REF_SIZE_USIZE: usize = 50;
 pub const WHITELIST_MINT_SIZE_USIZE: usize = 100;
-
 #[account()]
 #[derive(Debug)]
 pub struct OperationState {

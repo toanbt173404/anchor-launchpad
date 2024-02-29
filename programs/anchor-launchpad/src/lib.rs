@@ -136,7 +136,13 @@ pub mod anchor_launchpad {
     }
 
     pub fn claim_token(ctx: Context<ClaimTokens>) -> Result<()> {
-        ctx.accounts.claimTokens()?;
+        ctx.accounts.claim_tokens()?;
+        Ok(())
+    }
+
+
+    pub fn un_contribute(ctx: Context<UnContribute>) -> Result<()> {
+        ctx.accounts.un_contribute()?;
         Ok(())
     }
 }

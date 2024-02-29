@@ -36,7 +36,7 @@ pub struct ClaimTokens<'info> {
 }
 
 impl<'info> ClaimTokens<'info> {
-    pub fn claimTokens(&mut self) -> Result<()> {
+    pub fn claim_tokens(&mut self) -> Result<()> {
         let launchpad = &mut self.launchpad_account;
         let user_config_account = &mut self.user_config_account;
 

@@ -1,5 +1,7 @@
-use anchor_lang::prelude::{borsh::{BorshDeserialize, BorshSerialize}, *};
+use anchor_lang::prelude::*;
 use crate::error::ErrorCode;
+
+pub const COMMISION_DATA_SIZE_USIZE: usize = 50;
 
 #[account]
 pub struct LaunchpadAccount {
@@ -14,12 +16,19 @@ pub struct LaunchpadAccount {
   pub total_whitelist:u64,
   pub total_buyed: u64,
   pub total_history_refs: u64,
+  pub commission_data: Vec<CommissionData>,
   pub launchpad_params_step_1: LaunchpadParamsStep1,
   pub launchpad_params_step_2: LaunchpadParamsStep2,
   pub launchpad_params_step_3: LaunchpadParamsStep3,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Clone)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct CommissionData {
+    pub mint_pubkey: Pubkey,
+    pub amount: u64
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct LaunchpadParamsStep1 {
     pub currency: Pubkey,
     pub listing_option: u8,
@@ -29,7 +38,7 @@ pub struct LaunchpadParamsStep1 {
     pub contract_token: Pubkey, //mint pubkey
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct LaunchpadParamsStep2 {
     pub pre_rate: u64,
     pub whitelist: u64,
@@ -46,7 +55,7 @@ pub struct LaunchpadParamsStep2 {
     pub end_time: u64,
 }
 
-#[derive(BorshSerialize, BorshDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct LaunchpadParamsStep3 {
     pub logo_url: String,
     pub website: String,
@@ -79,7 +88,8 @@ impl Space for LaunchpadAccount {
         + 8 // total_history_refs
         + 75 // Placeholder size for LaunchpadParamsStep1, adjust based on actual structure
         + 128 // Placeholder size for LaunchpadParamsStep2, adjust again as needed
-        + 300; // Placeholder size for LaunchpadParamsStep3, adjust based on maximum expected string lengths
+        + 300 // Placeholder size for LaunchpadParamsStep3, adjust based on maximum expected string lengths
+        + (32 + 8) * 100;
 }
 
 
