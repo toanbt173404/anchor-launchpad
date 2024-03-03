@@ -1,8 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::error::ErrorCode;
 
-pub const COMMISION_DATA_SIZE_USIZE: usize = 50;
-
 #[account]
 pub struct LaunchpadAccount {
   pub bump: u8,
@@ -30,7 +28,6 @@ pub struct CommissionData {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct LaunchpadParamsStep1 {
-    pub currency: Pubkey,
     pub listing_option: u8,
     pub affiliate: u8,
     pub total_token_to: u64,
@@ -43,7 +40,6 @@ pub struct LaunchpadParamsStep2 {
     pub pre_rate: u64,
     pub whitelist: u64,
     pub liquidity_lock_day: u64,
-    pub router: Pubkey, //Raydium Pubkey
     pub soft_cap: u64,
     pub hard_cap: u64,
     pub min_buy: u64,
@@ -102,9 +98,10 @@ pub struct WhitelistAccount {
 
 impl WhitelistAccount {
     pub fn add_pubkeys(&mut self, pubkeys_to_add: Vec<Pubkey>) -> Result<()> {
+        let length = pubkeys_to_add.len();
         for pubkey in pubkeys_to_add {
             if !self.whitelist.contains(&pubkey) {
-                if self.whitelist.len() == self.whitelist.capacity() {
+                if self.whitelist.len() + length > 100 {
                     return Err(ErrorCode::WhitelistFull.into());
                 }
                 self.whitelist.push(pubkey);

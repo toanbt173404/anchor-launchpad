@@ -9,24 +9,24 @@ use error::ErrorCode;
 use helper::*;
 use states::*;
 
-declare_id!("4Vefj73cKWKUa4VD2nrMfXMY5W3KVJMHJ9q1nfG4TJKT");
+declare_id!("6B1Suwq1nw5DnkZUZoX2Ro3KAEEUaRqQFg2babmmWMG4");
 
 #[program]
 pub mod anchor_launchpad {
     use super::*;
-    pub fn initialize(ctx: Context<Initialize>, add_fee_un_on: Pubkey) -> Result<()> {
-        ctx.accounts.initialize(&ctx.bumps, add_fee_un_on)?;
+    pub fn initialize(ctx: Context<Initialize>, add_fee_un_con: Pubkey) -> Result<()> {
+        ctx.accounts.initialize(&ctx.bumps, add_fee_un_con)?;
         Ok(())
     }
 
     pub fn change_create_fee(
         ctx: Context<ChangeCreateFee>,
-        add_fee_un_on: Pubkey,
+        add_fee_un_con: Pubkey,
         new_fee: u64,
         creation_fee_option_sol: u8,
     ) -> Result<()> {
         ctx.accounts
-            .change_create_fee(add_fee_un_on, new_fee, creation_fee_option_sol)?;
+            .change_create_fee(add_fee_un_con, new_fee, creation_fee_option_sol)?;
         Ok(())
     }
 
@@ -111,7 +111,12 @@ pub mod anchor_launchpad {
         Ok(())
     }
 
-    pub fn contribute(ctx: Context<Contribute>, amount: u64, mint_addr: Pubkey) -> Result<()> {
+    pub fn withdraw_funds(ctx: Context<WithdrawFunds>, nonce: u8, open_time: u64) -> Result<()> {
+        contexts::withdraw_funds(ctx, nonce,open_time)?;
+        Ok(())
+    }
+
+    pub fn contribute(ctx: Context<Contribute>, amount: u64) -> Result<()> {
         let contributor_lamports = **ctx
             .accounts
             .contributor
@@ -131,7 +136,7 @@ pub mod anchor_launchpad {
             amount,
         )?;
 
-        ctx.accounts.contribute(amount, mint_addr)?;
+        ctx.accounts.contribute(amount)?;
         Ok(())
     }
 

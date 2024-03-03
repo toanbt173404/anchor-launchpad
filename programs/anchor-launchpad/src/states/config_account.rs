@@ -5,7 +5,7 @@ pub struct ConfigAccount {
   pub bump: u8,
   pub authority: Pubkey,
   pub creation_fee: u64,
-  pub add_fee_un_on: Pubkey,
+  pub add_fee_un_con: Pubkey,
   pub creation_fee_option_sol: u8,
 }
 

@@ -1,57 +1,32 @@
-use crate::{check_during_sale_conditions, error::ErrorCode};
+use crate::error::ErrorCode;
 use anchor_lang::prelude::*;
 use std::ops::Add;
 
 use crate::{
-    check_and_update_sale, LaunchpadAccount, MintConfigAccount,
+    check_and_update_sale, HistoryRef, LaunchpadAccount, MintConfigAccount,
     UserConfigAccount, WhitelistAccount,
 };
 
 #[derive(Accounts)]
-#[instruction(amount: u64)]
-pub struct Contribute<'info> {
+#[instruction(amount: u64, mint_addr: Pubkey)]
+pub struct WithdrawAllCommission<'info> {
     #[account(mut)]
     pub contributor: Signer<'info>,
     #[account(mut)]
     pub launchpad_account: Account<'info, LaunchpadAccount>,
     #[account(mut)]
-    pub mint_config_account: Account<'info, MintConfigAccount>,
-    #[account(mut)]
-    pub whitelist_account: Account<'info, WhitelistAccount>,
-    #[account(
-        init_if_needed,
-        payer = contributor,
-        seeds = [b"user_config".as_ref(), contributor.key().as_ref() , launchpad_account.key().as_ref()],
-        bump,
-        space = UserConfigAccount::INIT_SPACE
-    )]
     pub user_config_account: Account<'info, UserConfigAccount>,
     pub system_program: Program<'info, System>,
 }
-impl<'info> Contribute<'info> {
-    pub fn contribute(&mut self, amount: u64) -> Result<()> {
+impl<'info> WithdrawAllCommission<'info> {
+    pub fn withdraw_all_commission(&mut self, amount: u64, token_add: Pubkey) -> Result<()> {
         let launchpad = &mut self.launchpad_account;
-        let whitelist = &mut self.whitelist_account.whitelist;
-        let mint_config = &mut self.mint_config_account;
         let user_config = &mut self.user_config_account;
-        check_during_sale_conditions(launchpad)?;
 
         let contributor_pubkey = &self.contributor.to_account_info().key();
 
-        require!(
-            amount >= launchpad.launchpad_params_step_2.min_buy,
-            ErrorCode::MinAmount
-        );
-        require!(
-            amount <= launchpad.launchpad_params_step_2.max_buy,
-            ErrorCode::MaxAmount
-        );
-        // Check hard cap
-        require!(
-            launchpad.total_buyed.add(amount) <= launchpad.launchpad_params_step_2.hard_cap,
-            ErrorCode::HardCapReached
-        );
-
+        require!(launchpad.is_sale_active == 4, ErrorCode::PreSaleEnded);
+        
         require!(
             whitelist.contains(&contributor_pubkey)
                 || launchpad.launchpad_params_step_2.whitelist == 0
@@ -61,9 +36,14 @@ impl<'info> Contribute<'info> {
         );
 
         if launchpad.launchpad_params_step_1.affiliate > 0
-        {   
-            user_config.amount_ref += amount;
-            
+            && launchpad.launchpad_params_step_1.currency != token_add
+            && contributor_pubkey != &token_add
+        {
+            let history_ref_entry = HistoryRef {
+                amount,
+                token_ref: token_add,
+            };
+            user_config.history_ref.push(history_ref_entry);
             launchpad.total_history_refs = launchpad
                 .total_history_refs
                 .checked_add(1)
@@ -72,6 +52,7 @@ impl<'info> Contribute<'info> {
                 .commission
                 .checked_add(amount)
                 .ok_or(ErrorCode::Overflow)?;
+            user_config.ref_pubkey = token_add;
             launchpad.total_commission = launchpad
                 .total_commission
                 .checked_add(amount)

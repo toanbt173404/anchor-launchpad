@@ -5,7 +5,7 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-anchor_launchpad = "4Vefj73cKWKUa4VD2nrMfXMY5W3KVJMHJ9q1nfG4TJKT"
+anchor_launchpad = "6B1Suwq1nw5DnkZUZoX2Ro3KAEEUaRqQFg2babmmWMG4"
 
 [registry]
 url = "https://api.apr.dev"

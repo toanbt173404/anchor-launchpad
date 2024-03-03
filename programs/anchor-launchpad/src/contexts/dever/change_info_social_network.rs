@@ -2,7 +2,6 @@ use anchor_lang::prelude::*;
 
 use crate::LaunchpadAccount;
 use crate::error::ErrorCode;
-
 #[derive(Accounts)]
 pub struct ChangeInfoSocialNetwork<'info> {
     #[account(

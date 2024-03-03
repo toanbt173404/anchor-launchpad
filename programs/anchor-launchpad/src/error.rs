@@ -15,6 +15,8 @@ pub enum ErrorCode {
     #[msg("Presale has ended.")]
     PreSaleEnded,
     #[msg("It's not time to claim")]
+    PreSaleNotCompleted,
+    #[msg("Presale not completed")]
     NotClaimTime,
     #[msg("The whitelist is full.")]
     WhitelistFull,
@@ -33,5 +35,7 @@ pub enum ErrorCode {
     #[msg("Not enough lamports to buy the requested amount of tokens.")]
     InsufficientLamportsToBuyTokens,
     #[msg("Tokens already claimed")]
-    ClaimedToken
+    ClaimedToken,
+    #[msg("It's not time to withdrawFunds")]
+    NotWithdrawfundsTime
 }
