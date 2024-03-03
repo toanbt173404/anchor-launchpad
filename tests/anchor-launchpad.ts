@@ -49,16 +49,19 @@ describe("anchor-launchpad", () => {
 
   it("Contribute!", async () => {
     // Add your test here.
-    let amount = 5000;
+    let amount = 0.2 * LAMPORTS_PER_SOL;
+    const accountInfo = await connection.getAccountInfo(ctx.launchpadAccount);
+    console.log("Lamports in launchpadAccount:", accountInfo.lamports);
     await RPC.contribute(ctx, amount);
   });
 
   it("Un Contribute!", async () => {
     // Add your test here.
+// Assuming `ctx.launchpadAccount` is the public key of the launchpad account
+const accountInfo = await connection.getAccountInfo(ctx.launchpadAccount);
+console.log("Lamports in launchpadAccount:", accountInfo.lamports);
 
-    let mintConfigAccount  = await ctx.program.account.mintConfigAccount.fetch(ctx.mintConfigAccount);
-    console.log(mintConfigAccount.mint.toString());
-    console.log(ctx.launchpadMint.toString())
+    
     await RPC.unContribute(ctx);
   });
 

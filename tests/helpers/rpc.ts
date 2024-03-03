@@ -1,5 +1,5 @@
 import {
-    PublicKey, SystemProgram,
+    PublicKey, SystemProgram,LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -43,10 +43,10 @@ export namespace RPC {
             preRate: new anchor.BN(1),
             whitelist: new anchor.BN(0),
             liquidityLockDay: new anchor.BN(0),
-            softCap: new anchor.BN(1000),
-            hardCap: new anchor.BN(10000),
-            minBuy: new anchor.BN(100),
-            maxBuy: new anchor.BN(10000),
+            softCap: new anchor.BN(10 * LAMPORTS_PER_SOL),
+            hardCap: new anchor.BN(100 * LAMPORTS_PER_SOL),//100 SOL
+            minBuy: new anchor.BN(0.1 * LAMPORTS_PER_SOL),//0.1 SOL
+            maxBuy: new anchor.BN(1 * LAMPORTS_PER_SOL), //1 SOL
             typeRefund: new anchor.BN(0),
             liquidityRate: new anchor.BN(15),
             listingRate: new anchor.BN(10),
@@ -117,6 +117,7 @@ export namespace RPC {
             launchpadAccount: ctx.launchpadAccount,
             userConfigAccount: ctx.userConfigAccount,
             addFeeUnCon: ctx.addFeeUnConPubkey,
+            dever: ctx.dever.publicKey,
             mintConfigAccount: ctx.mintConfigAccount,
             systemProgram: SystemProgram.programId,
         }).signers([ctx.contributor]).rpc({

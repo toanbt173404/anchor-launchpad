@@ -242,6 +242,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "anchor_lock_token"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+]
+
+[[package]]
 name = "anyhow"
 version = "1.0.80"
 source = "registry+https://github.com/rust-lang/crates.io-index"

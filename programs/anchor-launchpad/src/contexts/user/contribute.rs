@@ -91,7 +91,8 @@ impl<'info> Contribute<'info> {
             launchpad.is_sale_active = 2;
         } else {
             check_and_update_sale(launchpad)?;
-        }
+        };
+        
         Ok(())
     }
 }

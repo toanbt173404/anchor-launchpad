@@ -14,7 +14,7 @@ pub struct CreatLaunchpad<'info> {
         init_if_needed,
         payer = dever,
         space = LaunchpadAccount::INIT_SPACE,
-        seeds = [b"launchpad".as_ref(), &launchpad_mint.key().as_ref(), &dever.key().as_ref()],
+        seeds = [b"launchpad".as_ref(), &dever.key().as_ref()],
         bump
     )]
     pub launchpad_account: Account<'info, LaunchpadAccount>,

@@ -9,7 +9,7 @@ use error::ErrorCode;
 use helper::*;
 use states::*;
 
-declare_id!("6B1Suwq1nw5DnkZUZoX2Ro3KAEEUaRqQFg2babmmWMG4");
+declare_id!("FjP1QmctbWVKr6SuDRqFHw56aTNdpZXK42mGGsZne3wK");
 
 #[program]
 pub mod anchor_launchpad {
@@ -135,7 +135,6 @@ pub mod anchor_launchpad {
             launchpad_account.to_account_info(),
             amount,
         )?;
-
         ctx.accounts.contribute(amount)?;
         Ok(())
     }

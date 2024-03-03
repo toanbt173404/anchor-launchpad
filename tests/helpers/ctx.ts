@@ -55,7 +55,7 @@ export async function createCtx(connection: Connection, program: Program<AnchorL
     )[0];
 
     const launchpadAccount = PublicKey.findProgramAddressSync(
-        [Buffer.from("launchpad"), launchpadMint.toBuffer(), dever.publicKey.toBuffer()],
+        [Buffer.from("launchpad"), dever.publicKey.toBuffer()],
         program.programId
     )[0];
 
