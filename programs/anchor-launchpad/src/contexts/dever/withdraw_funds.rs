@@ -264,6 +264,32 @@ pub fn withdraw_funds(ctx: Context<WithdrawFunds>, nonce: u8, open_time: u64) ->
                 }
             }
             initialize_pool_raydium(ctx.accounts.into(), nonce, open_time)?;
+            let deposit_instruction = raydium_contract_instructions::amm_instruction::deposit(
+                ctx.accounts.raydium_program.key,
+                ctx.accounts.amm_id,// LP Pool
+                amm_authority: &Pubkey,
+                amm_open_orders: &Pubkey,
+                amm_target_orders: &Pubkey,
+                lp_mint_address: &Pubkey,
+                pool_coin_token_account: &Pubkey,
+                pool_pc_token_account: &Pubkey,
+                serum_market: &Pubkey,
+                serum_event_queue: &Pubkey,
+                user_coin_token_account: &Pubkey,
+                user_pc_token_account: &Pubkey,
+                user_lp_token_account: &Pubkey,
+                user_owner: &Pubkey,
+                max_coin_amount: u64,
+                max_pc_amount: u64,
+                base_side: u64,
+            )?;
+            invoke_signed(
+                &deposit_instruction,
+                &ctx.accounts.to_account_infos(),
+                &[&seeds[..]]
+            )?;
+            //get balance lp
+            //let balance = anchor_spl::token::accessor::amount(&ctx.accounts.user_lp_token_account)?;
             send_lamports(launchpad_account_pubkey, dever_pubkey, total_arm)?;
         }
 
